@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Proxy List | Free Proxy</title>
+  <style>
+    body { 
+        font-family: Arial, Helvetica, sans-serif; 
+        margin: 16px; 
+        background: #000000; 
+        color: #ffffff; }
+    h1 { 
+        margin-bottom: 6px; 
+        text-align: center;
+        color: aqua;
+        
+    }
+    a {
+        color: aqua;
+    }
+    a:hover {
+        color: #f700ff;
+    }
+    .top { 
+        align-items:center; 
+        margin-top: 90px; 
+    }
+    .controls { 
+        display:flex; 
+        gap:8px; 
+        align-items:center;
+        position: absolute; 
+    }
+    table { 
+        width:100%; 
+        border-collapse:collapse; 
+        background:#151616; 
+        box-shadow:0 1px 3px rgba(0,0,0,0.08); 
+        color: #ffffff;
+    }
+    table:hover {
+        box-shadow:2 4px 8px #00dba4;
+    }
+    th, td { 
+        padding:8px 10px; 
+        border-bottom:1px solid #0026a1; 
+        text-align:left; 
+        font-size:13px; 
+    }
+    th { 
+        background:#222; 
+        color:#fbff00; 
+        position: sticky; 
+        top: 0; 
+        z-index: 2; 
+    }
+    tr:hover { 
+        background: rgb(0, 0, 0); 
+        color: fuchsia;
+    }
+    .muted { 
+        color:#666; 
+        font-size:13px; 
+    }
+    .small { 
+        font-size:12px; 
+        color:aqua; 
+    }
+    #interval {
+        background-color: #00095e;
+        border-radius: 20px;
+        color: #FFFFFF;
+    }
+    #interval:hover {
+        background-color: #00042c;
+    }
+    .status { 
+        padding:6px 10px; 
+        border-radius:6px; 
+        background:#eef; 
+        color:#003; 
+        font-weight:600; 
+    }
+    .btn { 
+        padding:8px 10px; 
+        border-radius:20px; 
+        background:#071564; 
+        color:#ffffff; 
+        cursor:pointer; 
+        border: none; 
+    }
+    .btn:hover {
+        background: #00042c;
+        color: aqua;
+        box-shadow: 0 -4px 8px #00aeff;
+    }
+    .btn:disabled { 
+        opacity:0.6; 
+        cursor:not-allowed; 
+    }
+    .wrap { 
+        max-height:70vh; 
+        overflow:auto; 
+        border-radius:6px; 
+    }
+    .msg {
+    font-size: 3rem;
+    font-weight: 700;
+    border-right: 4px solid aqua;
+    width: 11ch;
+    animation: intermit 0.7s infinite,
+    typ 6.5s infinite steps(11);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@keyframes intermit {
+    50% {
+        border-right-color: transparent;
+    }
+}
+
+@keyframes typ {
+    0% {
+        width: 0;
+    }
+    20% {
+        width: 0;
+    }
+    40% {
+        width: 11ch;
+    }
+    60% {
+        width: 11ch;
+    }
+    80% {
+        width: 11ch;
+    }
+    100% {
+        width: 0;
+    }
+}
+  </style>
+</head>
+<body>
+  <h1 class="msg">Proxy List</h1>
+  <br>
+  <div class="controls">
+      <label class="small">Atualizar a cada
+        <br>
+          <select id="interval">
+              <option value="30">30s</option>
+              <option value="60" selected>60s</option>
+              <option value="120">120s</option>
+            </select>
+        </label>
+        <button class="btn" id="refreshBtn">Atualizar agora</button>
+        <button class="btn" id="downloadBtn">Baixar CSV</button>
+    </div>
+</div>
+<br><br><br>
+<div class="wrap">
+    <table id="tbl">
+      <thead>
+        <tr>
+            <th>IP:Port</th><th>Tipo</th><th>País</th><th>Cidade</th><th>Porta</th><th>Latência</th><th>Velocidade</th><th>Uptime</th><th>Última checagem (GMT+03)</th><th>Raw</th>
+        </tr>
+      </thead>
+      <tbody id="body"></tbody>
+    </table>
+</div>
+
+<div class="top">
+  <div>
+    <div class="muted">Fonte: <a href="https://spys.one/en/socks-proxy-list/" target="_blank">spys.one — socks proxy list</a></div>
+    <div class="small" id="meta"></div>
+  </div>
+<script>
+const api = "/api/proxies";
+let currentData = [];
+let timer = null;
+
+function renderMeta(obj){
+  const meta = document.getElementById('meta');
+  if(!obj) { meta.textContent = ''; return; }
+  meta.textContent = `Obtido em: ${obj.fetched_at_utc} (UTC) — ${obj.fetched_at_gmt3} (GMT+03) — total: ${obj.proxies.length} — source: ${obj.source_url}`;
+}
+
+function renderTable(list){
+  const body = document.getElementById('body');
+  body.innerHTML = '';
+  if(!list || !list.length){
+    body.innerHTML = '<tr><td colspan="10" class="muted">Nenhum proxy encontrado</td></tr>';
+    return;
+  }
+  for(const p of list){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${p.ip_port||''}</td>
+                    <td>${p.type||''}</td>
+                    <td>${p.country||''}</td>
+                    <td>${p.city||''}</td>
+                    <td>${p.port||''}</td>
+                    <td>${p.latency||''}</td>
+                    <td>${p.speed||''}</td>
+                    <td>${p.uptime||''}</td>
+                    <td>${p.last_checked_raw ? p.last_checked_raw : ''}</td>
+                    <td>${p.raw ? p.raw.replace(/</g,'&lt;').slice(0,120) : ''}</td>`;
+    body.appendChild(tr);
+  }
+}
+
+async function fetchAndRender(){
+  const refreshBtn = document.getElementById('refreshBtn');
+  refreshBtn.disabled = true;
+  try {
+    const r = await fetch(api);
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    currentData = j.proxies || [];
+    renderMeta(j);
+    renderTable(currentData);
+    refreshBtn.disabled = false;
+  } catch(err){
+    console.error(err);
+    document.getElementById('meta').textContent = 'Erro ao obter dados: ' + err.message;
+    document.getElementById('body').innerHTML = '<tr><td colspan="10" class="muted">Erro ao obter dados. Verifique o backend.</td></tr>';
+    refreshBtn.disabled = false;
+  }
+}
+
+function startAutoRefresh(){
+  const sel = document.getElementById('interval');
+  const secs = parseInt(sel.value, 10) || 60;
+  if(timer) clearInterval(timer);
+  timer = setInterval(fetchAndRender, secs * 1000);
+}
+
+// download CSV
+function downloadCSV(){
+  if(!currentData || !currentData.length) return alert('Sem dados para baixar');
+  const hdr = ["ip_port","type","country","city","port","latency","speed","uptime","last_checked_raw","raw"];
+  const rows = [hdr.join(",")];
+  for(const r of currentData){
+    const row = hdr.map(h => {
+      const v = (r[h] !== undefined && r[h] !== null) ? String(r[h]).replace(/"/g,'""') : "";
+      return `"${v}"`;
+    }).join(",");
+    rows.push(row);
+  }
+  const blob = new Blob([rows.join("\n")], {type: "text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'proxies_spysone.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('refreshBtn').addEventListener('click', fetchAndRender);
+document.getElementById('downloadBtn').addEventListener('click', downloadCSV);
+document.getElementById('interval').addEventListener('change', startAutoRefresh);
+
+// inicializar
+fetchAndRender();
+startAutoRefresh();
+</script>
+</body>
+</html>
