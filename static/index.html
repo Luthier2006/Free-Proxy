@@ -13,8 +13,7 @@
     h1 { 
         margin-bottom: 6px; 
         text-align: center;
-        color: aqua;
-        
+        color: aqua;    
     }
     a {
         color: aqua;
@@ -141,19 +140,19 @@
         width: 0;
     }
 }
-  </style>
+</style>
 </head>
 <body>
   <h1 class="msg">Proxy List</h1>
   <br>
   <div class="controls">
-      <label class="small">Atualizar a cada
-        <br>
-          <select id="interval">
-              <option value="30">30s</option>
-              <option value="60" selected>60s</option>
-              <option value="120">120s</option>
-            </select>
+    <label class="small">Atualizar a cada
+      <br>
+      <select id="interval">
+        <option value="30">30s</option>
+        <option value="60" selected>60s</option>
+        <option value="120">120s</option>
+      </select>
         </label>
         <button class="btn" id="refreshBtn">Atualizar agora</button>
         <button class="btn" id="downloadBtn">Baixar CSV</button>
@@ -170,7 +169,6 @@
       <tbody id="body"></tbody>
     </table>
 </div>
-
 <div class="top">
   <div>
     <div class="muted">Fonte: <a href="https://spys.one/en/socks-proxy-list/" target="_blank">spys.one — socks proxy list</a></div>
