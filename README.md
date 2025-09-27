@@ -1,4 +1,4 @@
-# 🌍 Proxy Dashboard em Tempo Real
+# [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=aqua&size=35&center=true&vCenter=true&width=1000&lines=Free+Proxy+Em+Tempo+Real)](https://git.io/typing-svg) 
 
 Este projeto é um **site em HTML + FastAPI** que exibe informações de proxies (SOCKS4/5) em **tempo real**, obtidas do [spys.one](https://spys.one/en/socks-proxy-list/).
 
