@@ -1,34 +1,36 @@
-# [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=aqua&size=35&center=true&vCenter=true&width=1000&lines=Free+Proxy+Em+Tempo+Real)](https://git.io/typing-svg) 
+# [![Typing SVG](https://readme-typing-svg.herokuapp.com/?color=aqua&size=35&center=true&vCenter=true&width=1000&lines=Free+real-time+proxy)](https://git.io/typing-svg) 
 
-Este projeto é um **site em HTML + FastAPI** que exibe informações de proxies (SOCKS4/5) em **tempo real**, obtidas do [spys.one](https://spys.one/en/socks-proxy-list/).
+This project is a **HTML + FastAPI website** that displays real-time proxy (SOCKS4/5) information obtained from [spys.one](https://spys.one/en/socks-proxy-list/).
 
-O sistema faz scraping da lista de proxies e atualiza automaticamente a cada **60 segundos**, exibindo:
+The system scrapes the proxy list and automatically updates it every **60 seconds**, displaying:
 
-- ✅ IP e Porta  
-- ✅ Tipo de Proxy (SOCKS4 ou SOCKS5)  
-- ✅ País / Cidade  
-- ✅ Hostname / Organização (quando disponível)  
-- ✅ Latência  
-- ✅ Velocidade  
-- ✅ Uptime  
-- ✅ Última Checagem  
+- ✅ IP and Port
+- ✅ Proxy Type (SOCKS4 or SOCKS5)
+- ✅ Country / City
+- ✅ Hostname / Organization (when available)
+- ✅ Latency
+- ✅ Speed
+- ✅ Uptime
+- ✅ Last Check
 
 ---
 
-## 📂 Estrutura do Projeto
+## 📂 Project Structure
 
-🚀 Futuras melhorias
+🚀 Future Improvements
 
-Adicionar filtros avançados (por país, tipo de proxy, velocidade mínima)
+Add advanced filters (by country, proxy type, minimum speed)
 
-Gravar histórico em banco de dados (SQLite/PostgreSQL)
+Record history in a database (SQLite/PostgreSQL)
 
-Criar painel com gráficos de latência e uptime
+Create a dashboard with latency and uptime graphs
 
 ##
 
-⚠️ Aviso Legal
+⚠️ Legal Notice
 
-Este projeto é apenas para fins educacionais e de pesquisa.
-O uso de proxies pode violar termos de serviços de terceiros.
-Use com responsabilidade.
+This project is for educational and research purposes only.
+
+The use of proxies may violate third-party terms of service.
+
+Use responsibly.
